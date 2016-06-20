@@ -35,6 +35,8 @@ public final class JobSettings implements Serializable {
     
     private String jobName;
     
+    private String jobType;
+    
     private String jobClass;
     
     private int shardingTotalCount;
@@ -53,6 +55,8 @@ public final class JobSettings implements Serializable {
     
     private int fetchDataCount;
     
+    private boolean streamingProcess;
+    
     private int maxTimeDiffSeconds;
     
     private int monitorPort = -1;
@@ -64,4 +68,6 @@ public final class JobSettings implements Serializable {
     private String jobShardingStrategyClass;
     
     private String description;
+    
+    private String scriptCommandLine;
 }

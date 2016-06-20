@@ -15,7 +15,12 @@
                         <input type="text" id="jobClass" name="jobClass" class="form-control" disabled />
                     </div>
                 </div>
-                
+                <div class="form-group">
+                    <label for="jobType" class="col-sm-2 control-label">作业类型</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="jobType" name="jobType" class="form-control" disabled />
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="shardingTotalCount" class="col-sm-2 control-label">作业分片总数</label>
                     <div class="col-sm-1">
@@ -32,24 +37,30 @@
                         <input type="text" id="cron" name="cron" class="form-control" data-toggle="tooltip" data-placement="bottom" title="作业启动时间的cron表达式" required />
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="concurrentDataProcessThreadCount" class="col-sm-2 control-label">处理数据的并发线程数</label>
-                    <div class="col-sm-1">
-                        <input type="number" id="concurrentDataProcessThreadCount" name="concurrentDataProcessThreadCount" class="form-control" data-toggle="tooltip" data-placement="bottom" title="只对高吞吐量处理数据流类型作业起作用" />
+                <#if jobType == "DATA_FLOW">
+                    <div class="form-group">
+                        <label for="concurrentDataProcessThreadCount" class="col-sm-2 control-label">处理数据的并发线程数</label>
+                        <div class="col-sm-1">
+                            <input type="number" id="concurrentDataProcessThreadCount" name="concurrentDataProcessThreadCount" class="form-control" data-toggle="tooltip" data-placement="bottom" title="只对高吞吐量处理数据流类型作业起作用" />
+                        </div>
+                        
+                        <label for="processCountIntervalSeconds" class="col-sm-2 control-label">统计处理数据量的间隔秒数</label>
+                        <div class="col-sm-2">
+                            <input type="number" id="processCountIntervalSeconds" name="processCountIntervalSeconds" class="form-control" data-toggle="tooltip" data-placement="bottom" title="只对处理数据流类型作业起作用" />
+                        </div>
+                        
+                        <label for="fetchDataCount" class="col-sm-2 control-label">每次抓取的数据量</label>
+                        <div class="col-sm-2">
+                            <input type="number" id="fetchDataCount" name="fetchDataCount" class="form-control" data-toggle="tooltip" data-placement="bottom" title="可在不重启作业的情况下灵活配置抓取数据量" />
+                        </div>
                     </div>
-                    
-                    <label for="processCountIntervalSeconds" class="col-sm-2 control-label">统计处理数据量的间隔秒数</label>
-                    <div class="col-sm-2">
-                        <input type="number" id="processCountIntervalSeconds" name="processCountIntervalSeconds" class="form-control" data-toggle="tooltip" data-placement="bottom" title="只对处理数据流类型作业起作用" />
+                    <div class="form-group">
+                        <label for="fetchDataCount" class="col-sm-2 control-label">是否流式处理数据</label>
+                        <div class="col-sm-2">
+                            <input type="checkbox" id="streamingProcess" name="streamingProcess" data-toggle="tooltip" data-placement="bottom" title="如果流式处理数据, 则fetchData不返回空结果将持续执行作业; 如果非流式处理数据, 则处理数据完成后作业结束" />
+                        </div>
                     </div>
-                    
-                    <label for="fetchDataCount" class="col-sm-2 control-label">每次抓取的数据量</label>
-                    <div class="col-sm-2">
-                        <input type="number" id="fetchDataCount" name="fetchDataCount" class="form-control" data-toggle="tooltip" data-placement="bottom" title="可在不重启作业的情况下灵活配置抓取数据量" />
-                    </div>
-                </div>
-                
+                </#if>
                 <div class="form-group">
                     <label for="maxTimeDiffSeconds" class="col-sm-2 control-label">最大容忍的本机与注册中心的时间误差秒数</label>
                     <div class="col-sm-1">
@@ -99,6 +110,14 @@
                         <textarea id="description" name="description" class="form-control"></textarea>
                     </div>
                 </div>
+                <#if jobType == "SCRIPT">
+                <div class="form-group">
+                    <label for="scriptCommandLine" class="col-sm-2 control-label">脚本作业全路径</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="scriptCommandLine" name="scriptCommandLine" class="form-control" data-toggle="tooltip" data-placement="bottom" title="执行脚本的全路径名称，可以包含参数" />
+                    </div>
+                </div>
+                </#if>
                 <button type="reset" class="btn btn-inverse">重置</button>
                 <button type="submit" class="btn btn-primary">更新</button>
             </form>
@@ -119,6 +138,7 @@
                 <tbody>
                 </tbody>
             </table>
+            <button id="trigger-all-jobs-btn" class="btn btn-success">全部触发</button>
             <button id="pause-all-jobs-btn" class="btn btn-warning">全部暂停</button>
             <button id="resume-all-jobs-btn" class="btn btn-success">全部恢复</button>
         </div>

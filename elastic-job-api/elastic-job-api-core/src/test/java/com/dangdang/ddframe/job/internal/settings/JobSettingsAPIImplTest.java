@@ -64,6 +64,7 @@ public class JobSettingsAPIImplTest {
     
     private void createExpected() {
         when(registryCenter.get("/testJob/config/jobClass")).thenReturn("TestJob");
+        when(registryCenter.get("/testJob/config/jobType")).thenReturn("DATA_FLOW");
         when(registryCenter.get("/testJob/config/shardingTotalCount")).thenReturn("1");
         when(registryCenter.get("/testJob/config/cron")).thenReturn("0/30 * * * * *");
         when(registryCenter.get("/testJob/config/shardingItemParameters")).thenReturn("0=A");
@@ -75,24 +76,24 @@ public class JobSettingsAPIImplTest {
         when(registryCenter.get("/testJob/config/maxTimeDiffSeconds")).thenReturn("60000");
         when(registryCenter.get("/testJob/config/failover")).thenReturn("true");
         when(registryCenter.get("/testJob/config/misfire")).thenReturn("true");
+        when(registryCenter.get("/testJob/config/streamingProcess")).thenReturn("false");
         when(registryCenter.get("/testJob/config/jobShardingStrategyClass")).thenReturn("MyJobShardingStrategy");
         when(registryCenter.get("/testJob/config/description")).thenReturn("description");
     }
     
-    private void assertJobSettings(JobSettings jobSettings) {
+    private void assertJobSettings(final JobSettings jobSettings) {
         assertThat(jobSettings.getJobName(), is("testJob"));
+        assertThat(jobSettings.getJobType(), is("DATA_FLOW"));
         assertThat(jobSettings.getJobClass(), is("TestJob"));
         assertThat(jobSettings.getShardingTotalCount(), is(1));
         assertThat(jobSettings.getCron(), is("0/30 * * * * *"));
         assertThat(jobSettings.getShardingItemParameters(), is("0=A"));
         assertThat(jobSettings.getJobParameter(), is("param"));
         assertThat(jobSettings.isMonitorExecution(), is(true));
-        assertThat(jobSettings.getProcessCountIntervalSeconds(), is(300));
-        assertThat(jobSettings.getConcurrentDataProcessThreadCount(), is(10));
-        assertThat(jobSettings.getFetchDataCount(), is(100));
         assertThat(jobSettings.getMaxTimeDiffSeconds(), is(60000));
         assertThat(jobSettings.isFailover(), is(true));
         assertThat(jobSettings.isMisfire(), is(true));
+        assertThat(jobSettings.isStreamingProcess(), is(false));
         assertThat(jobSettings.getJobShardingStrategyClass(), is("MyJobShardingStrategy"));
         assertThat(jobSettings.getDescription(), is("description"));
     }
@@ -112,6 +113,7 @@ public class JobSettingsAPIImplTest {
         verify(registryCenter).get("/testJob/config/misfire");
         verify(registryCenter).get("/testJob/config/jobShardingStrategyClass");
         verify(registryCenter).get("/testJob/config/description");
+        verify(registryCenter).get("/testJob/config/streamingProcess");
     }
     
     @Test
@@ -121,16 +123,20 @@ public class JobSettingsAPIImplTest {
         jobSettings.setJobName("testJob");
         jobSettings.setJobClass("TestJob");
         jobSettings.setShardingTotalCount(10);
-        jobSettings.setCron(null);
         jobSettings.setProcessCountIntervalSeconds(300);
         jobSettings.setConcurrentDataProcessThreadCount(10);
         jobSettings.setFetchDataCount(100);
         jobSettings.setMaxTimeDiffSeconds(60000);
         jobSettings.setMonitorExecution(true);
-        jobSettings.setFailover(true);
-        jobSettings.setMisfire(true);
+        
+        jobSettings.setCron(null);
+        jobSettings.setStreamingProcess(true);
+        jobSettings.setFailover(false);
+        jobSettings.setMisfire(false);
         jobSettingsAPI.updateJobSettings(jobSettings);
-        verify(registryCenter).update("/testJob/config/shardingTotalCount", "10");
         verify(registryCenter, times(0)).update("/testJob/config/cron", null);
+        verify(registryCenter).update("/testJob/config/streamingProcess", "true");
+        verify(registryCenter).update("/testJob/config/failover", "false");
+        verify(registryCenter).update("/testJob/config/misfire", "false");
     }
 }

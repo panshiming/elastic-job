@@ -17,12 +17,11 @@
 
 package com.dangdang.ddframe.job.plugin.job.type.fixture;
 
-import java.util.List;
-
 import com.dangdang.ddframe.job.api.JobExecutionSingleShardingContext;
 import com.dangdang.ddframe.job.plugin.job.type.dataflow.AbstractBatchSequenceDataFlowElasticJob;
-
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 public final class FooStreamingBatchSequenceDataFlowElasticJob extends AbstractBatchSequenceDataFlowElasticJob<Object> {
@@ -46,10 +45,5 @@ public final class FooStreamingBatchSequenceDataFlowElasticJob extends AbstractB
             }
         }
         return result;
-    }
-    
-    @Override
-    public boolean isStreamingProcess() {
-        return true;
     }
 }

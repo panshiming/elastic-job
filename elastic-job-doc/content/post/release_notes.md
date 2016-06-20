@@ -6,21 +6,50 @@ weight=1
 
 # Release Notes
 
-## 1.0.7-SNAPSHOT
+## 1.1.1-SNAPSHOT
+
+### 功能提升
+
+1. [ISSUE #110](https://github.com/dangdangdotcom/elastic-job/issues/110) 手动触发作业
+
+### 缺陷修正
+1. [ISSUE #99](https://github.com/dangdangdotcom/elastic-job/issues/99) 删除作业异步导致作业删除后, 还未结束的作业继续创建zk数据
+
+## 1.1.0
+
+### 结构调整
+
+1. [ISSUE #97](https://github.com/dangdangdotcom/elastic-job/issues/97) JobConfiguration重构为SimpleJobConfiguration，DataFlowJobConfiguration，ScriptJobConfiguration
+1. [ISSUE #102](https://github.com/dangdangdotcom/elastic-job/issues/102) 重新定义Java/Spring Config API，使用Factory+Builder模式代替原有的Constructor+Setter模式
+1. [ISSUE #104](https://github.com/dangdangdotcom/elastic-job/issues/104) 移除@Deprecated代码
+1. [ISSUE #105](https://github.com/dangdangdotcom/elastic-job/issues/105) 重构Spring命名空间驼峰式定义
+1. [ISSUE #106](https://github.com/dangdangdotcom/elastic-job/issues/106) isStreaming配置化
+1. [ISSUE #107](https://github.com/dangdangdotcom/elastic-job/issues/107) reg-center更名为registry-center-ref
+
+## 1.0.8
+
+### 新功能
+
+1. [ISSUE #95](https://github.com/dangdangdotcom/elastic-job/issues/95) 增加脚本类型作业支持
+
+## 1.0.7
 
 ### 结构调整
 
 1. [ISSUE #88](https://github.com/dangdangdotcom/elastic-job/issues/88) stop作业改名为pause
 
 ### 新功能
+
 1. [ISSUE #91](https://github.com/dangdangdotcom/elastic-job/issues/91) 作业生命周期操作API
 
 ### 功能提升
 
 1. [ISSUE #84](https://github.com/dangdangdotcom/elastic-job/issues/84) 控制台提供作业启用/禁用按钮操作
 1. [ISSUE #87](https://github.com/dangdangdotcom/elastic-job/issues/87) 调整主节点选举流程，作业关闭，禁用和暂停将触发主节点选举
+1. [ISSUE #93](https://github.com/dangdangdotcom/elastic-job/issues/93) 注册中心配置提供baseSleepTimeMilliseconds、maxSleepTimeMilliseconds和maxRetries的默认值
 
-
+### 缺陷修正
+1. [ISSUE #92](https://github.com/dangdangdotcom/elastic-job/issues/92) 修改分片总数参数导致仅单一节点执行的监听抛出超时异常
 
 ## 1.0.6
 

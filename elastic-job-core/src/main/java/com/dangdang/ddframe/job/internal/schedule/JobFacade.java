@@ -17,8 +17,8 @@
 
 package com.dangdang.ddframe.job.internal.schedule;
 
-import com.dangdang.ddframe.job.api.JobConfiguration;
 import com.dangdang.ddframe.job.api.JobExecutionMultipleShardingContext;
+import com.dangdang.ddframe.job.api.config.JobConfiguration;
 import com.dangdang.ddframe.job.api.listener.ElasticJobListener;
 import com.dangdang.ddframe.job.internal.config.ConfigurationService;
 import com.dangdang.ddframe.job.internal.execution.ExecutionContextService;
@@ -88,6 +88,32 @@ public class JobFacade {
         return configService.getConcurrentDataProcessThreadCount();
     }
     
+    /**
+     * 获取是否流式处理数据.
+     *
+     * <p>
+     * 如果流式处理数据, 则fetchData不返回空结果将持续执行作业. 如果非流式处理数据, 则处理数据完成后作业结束.
+     * </p>
+     *
+     * @return 是否流式处理数据
+     */
+    public boolean isStreamingProcess() {
+        return configService.isStreamingProcess();
+    }
+    
+    /**
+     * 获取脚本型作业执行命令行.
+     *
+     * <p>
+     * 仅脚本作业有效.
+     * </p>
+     *
+     * @return 脚本型作业执行命令行
+     */
+    public String getScriptCommandLine() {
+        return configService.getScriptCommandLine();
+    }
+
     /**
      * 检查本机与注册中心的时间误差秒数是否在允许范围.
      */
@@ -178,12 +204,12 @@ public class JobFacade {
     /**
      * 判断作业是否符合继续运行的条件.
      * 
-     * <p>如果作业停止或需要重分片则作业将不会继续运行.</p>
+     * <p>如果作业停止或需要重分片或非流式处理则作业将不会继续运行.</p>
      * 
      * @return 作业是否符合继续运行的条件
      */
     public boolean isEligibleForJobRunning() {
-        return !serverService.isJobPausedManually() && !shardingService.isNeedSharding();
+        return !serverService.isJobPausedManually() && !shardingService.isNeedSharding() && configService.isStreamingProcess();
     }
     
     /**判断是否需要重分片.

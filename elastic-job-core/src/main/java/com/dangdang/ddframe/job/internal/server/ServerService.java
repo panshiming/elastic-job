@@ -17,7 +17,7 @@
 
 package com.dangdang.ddframe.job.internal.server;
 
-import com.dangdang.ddframe.job.api.JobConfiguration;
+import com.dangdang.ddframe.job.api.config.JobConfiguration;
 import com.dangdang.ddframe.job.internal.env.LocalHostService;
 import com.dangdang.ddframe.job.internal.storage.JobNodeStorage;
 import com.dangdang.ddframe.reg.base.CoordinatorRegistryCenter;
@@ -69,6 +69,13 @@ public class ServerService {
         } else {
             jobNodeStorage.removeJobNodeIfExisted(ServerNode.getDisabledNode(localHostService.getIp()));
         }
+    }
+    
+    /**
+     * 清除立刻执行作业的标记.
+     */
+    public void clearJobTriggerStatus() {
+        jobNodeStorage.removeJobNodeIfExisted(ServerNode.getTriggerNode(localHostService.getIp()));
     }
     
     /**
